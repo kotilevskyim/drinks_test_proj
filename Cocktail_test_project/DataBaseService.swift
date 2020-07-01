@@ -55,6 +55,80 @@ struct DataBaseService {
         
     }
     
+    static func getFiteredDrinks(filters: [String], completion: @escaping(([Drinks]?) -> Void)){
+        var result = [Drinks]()
+        let fixedFilters = filters.map{item in
+            return item.replacingOccurrences(of: " ", with: "_")
+        }
+        
+        let group = DispatchGroup()
+        for item in fixedFilters {
+            group.enter()
+            guard let urlFilter = URL(string: "\(url)\(item)") else {return}
+            print("URL \(urlFilter)")
+            DataBaseService.getDetails(for: urlFilter) { (drink) in
+                print(drink)
+                result.append(drink)
+                group.leave()
+            }
+        }
+            
+        group.notify(queue: .global(qos: .utility)) {
+            completion(result)
+        }
+            
+            
+            
+//        let operationQueue = OperationQueue()
+//        let firstOperation = BlockOperation{
+//            let group = DispatchGroup()
+//
+//            for item in fixedFilters {
+//                group.enter()
+//                guard let urlFilter = URL(string: "\(url)\(item)") else {return}
+//                print("URL \(urlFilter)")
+//                DataBaseService.getDetails(for: urlFilter) { (drink) in
+//                    print(drink)
+//                    result.append(drink)
+//                }
+//
+//                group.leave()
+//            }
+//            group.wait()
+//        }
+//        let secondOperation = BlockOperation {
+//            completion(result)
+//        }
+//        secondOperation.addDependency(firstOperation)
+//        //operationQueue.addOperation(firstOperation)
+//        operationQueue.addOperations([firstOperation, secondOperation], waitUntilFinished: true)
+        
+        
+    }
+    
+    static private func getDetails(for url: URL, completion: @escaping((Drinks) -> Void)) {
+        let dataTask = URLSession.shared.dataTask(with: url) { (data,_,_) in
+            if let response = data {
+                print(response)
+                
+                do {
+                    let decoder = JSONDecoder()
+                    let decodedInfo = try decoder.decode(Drinks.self, from: response)
+//                    if var result = result {
+//                        result.append(decodedInfo)
+//                    } else {
+//                        result = [decodedInfo]
+//                    }
+                    completion(decodedInfo)
+                } catch {
+                    print(error)
+                }
+            }
+        }
+        dataTask.resume()
+    }
 }
+
+
 
 

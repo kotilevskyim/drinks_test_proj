@@ -30,10 +30,3 @@ struct Filters: Decodable {
     
 }
 
-struct FilterList: Decodable {
-    let drinks: [FilterCategory]
-}
-
-struct FilterCategory: Decodable {
-    let strCategory: String
-}

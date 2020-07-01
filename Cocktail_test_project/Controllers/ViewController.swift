@@ -12,11 +12,11 @@ import UIKit
 class ViewController: UIViewController {
     
     var dataSource: [Category]?
-    
+    let cellSpacingHeight: CGFloat = 5
     let  activityIndicator = UIActivityIndicatorView(style: .large)
     // MARK: - Outlets
     
-
+    
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,27 +25,26 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-         self.tableView.separatorColor = .clear
-        
-      
+        self.tableView.separatorColor = .clear
+        setActivityIndicator()
 
-     setActivityIndicator()
-//
-//        let imageView = UIImageView()
-//        NSLayoutConstraint.activate([
-//            imageView.heightAnchor.constraint(equalToConstant: 20),
-//            imageView.widthAnchor.constraint(equalToConstant: 20)
-//        ])
-//        imageView.backgroundColor = .red
-//
-//        let titleLabel = UILabel()
-//        titleLabel.text = "Drinks"
-//
-//        let hStack = UIStackView(arrangedSubviews: [imageView, titleLabel])
-//        hStack.spacing = 5
-//        hStack.alignment = .center
-//
-//        navigationItem.titleView = hStack
+        let imageView = UIImageView()
+        NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(equalToConstant: 20),
+            imageView.widthAnchor.constraint(equalToConstant: 20)
+        ])
+        
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "Drinks"
+        titleLabel.font = .boldSystemFont(ofSize: 20)
+        
+        let hStack = UIStackView(arrangedSubviews: [imageView, titleLabel])
+        //        spacing to the left
+        hStack.spacing = -180
+        //        hStack.alignment = .center
+        
+        navigationItem.titleView = hStack
         
         DataBaseService.getRandomCocktailList { (apiResponse) in
             if let response = apiResponse {
@@ -61,11 +60,40 @@ class ViewController: UIViewController {
             }
         }
     }
-
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        activityIndicator.isHidden = false
+        dataSource?.removeAll()
+        tableView.reloadData()
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showFilter" {
+            let filterVC = segue.destination as? FilterViewController
+            filterVC?.delegate = self
+        }
+    }
 }
 
 // MARK: - Extension
+
+extension ViewController: FilterDelegate {
+    func filterDidFilterDrinks(drinks: [Drinks], filters: [String]) {
+        guard drinks.count == filters.count else {
+            fatalError("Arrays count are not equal.")
+        }
+        let combined = Array(zip(filters, drinks.map{$0.drinks}))
+        print(combined)
+        self.dataSource = combined.map({Category(name: $0.0, drinks: $0.1.map({DrinkItem(name: $0.strDrink, imageUrl: $0.strDrinkThumb, id: $0.idDrink)}))})
+        DispatchQueue.main.async {
+            self.activityIndicator.isHidden = true
+            self.tableView.reloadData()
+        }
+    }
+}
 
 extension ViewController: UITableViewDelegate,  UITableViewDataSource {
     
@@ -98,18 +126,22 @@ extension ViewController: UITableViewDelegate,  UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? CustomTableViewCell
         cell?.cocktailImg.image = UIImage(data: dataSource[indexPath.section].drinks[indexPath.row].image!)
         cell?.cocktailLbl.text = dataSource[indexPath.section].drinks[indexPath.row].name
-
-        return cell!
-    }
-    
-
-      func setActivityIndicator() {
-           activityIndicator.frame = CGRect(x: view.frame.width / 2 - 10, y: view.frame.height/2 - 10, width: 20, height: 20)
-           activityIndicator.startAnimating()
-           view.addSubview(activityIndicator)
         
-       
+        return cell!
+        
     }
     
     
+    func setActivityIndicator() {
+        activityIndicator.frame = CGRect(x: view.frame.width / 2 - 10, y: view.frame.height/2 - 10, width: 20, height: 20)
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+    }
+    
+    // Set the spacing between sections
+       func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+}
+
+
 }

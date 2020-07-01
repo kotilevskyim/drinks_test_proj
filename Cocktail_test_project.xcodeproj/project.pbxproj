@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C536271224AC6EDE00CE7965 /* FilterTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C536271124AC6EDE00CE7965 /* FilterTableViewController.swift */; };
+		C536271A24ACBDC000CE7965 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C536271924ACBDC000CE7965 /* FilterViewController.swift */; };
 		C54CB26224AB16F500A103D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54CB26124AB16F500A103D6 /* AppDelegate.swift */; };
 		C54CB26424AB16F500A103D6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54CB26324AB16F500A103D6 /* SceneDelegate.swift */; };
 		C54CB26624AB16F500A103D6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54CB26524AB16F500A103D6 /* ViewController.swift */; };
@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C536271124AC6EDE00CE7965 /* FilterTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewController.swift; sourceTree = "<group>"; };
+		C536271924ACBDC000CE7965 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		C54CB25E24AB16F500A103D6 /* Cocktail_test_project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cocktail_test_project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C54CB26124AB16F500A103D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C54CB26324AB16F500A103D6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,7 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				C54CB26524AB16F500A103D6 /* ViewController.swift */,
-				C536271124AC6EDE00CE7965 /* FilterTableViewController.swift */,
+				C536271924ACBDC000CE7965 /* FilterViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -188,11 +188,11 @@
 				C54CB26624AB16F500A103D6 /* ViewController.swift in Sources */,
 				C54CB26224AB16F500A103D6 /* AppDelegate.swift in Sources */,
 				C54CB27624AB262E00A103D6 /* CustomTableViewCell.swift in Sources */,
+				C536271A24ACBDC000CE7965 /* FilterViewController.swift in Sources */,
 				C54CB27824AB27CF00A103D6 /* DataBaseService.swift in Sources */,
 				C54CB26424AB16F500A103D6 /* SceneDelegate.swift in Sources */,
 				C54CB27A24AB6CAF00A103D6 /* DataModel.swift in Sources */,
 				C5AE833024AB815300679741 /* Category.swift in Sources */,
-				C536271224AC6EDE00CE7965 /* FilterTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
