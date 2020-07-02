@@ -15,7 +15,11 @@ protocol FilterDelegate: class {
 class FilterViewController: UIViewController {
     
     
-    var dataSource: DrinkFilters?
+    var dataSource: DrinkFilters? {
+        didSet{
+            dataFilter = dataSource!.drinks.map{ $0.strCategory }
+        }
+    }
     var dataFilter = [String]()
     weak var delegate: FilterDelegate?
     
@@ -72,6 +76,7 @@ extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FilterCell" , for: indexPath)
         cell.textLabel?.text = dataSource?.drinks[indexPath.row].strCategory
+        cell.accessoryType = .checkmark
         return cell
     }
     
@@ -88,7 +93,9 @@ extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
+            let indexForRemoval = dataFilter.firstIndex(of: dataSource!.drinks[indexPath.row].strCategory)
             dataFilter.remove(at: indexPath.row)
+            
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             dataFilter.append(dataSource!.drinks[indexPath.row].strCategory)

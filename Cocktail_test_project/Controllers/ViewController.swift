@@ -25,16 +25,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        tableView.prefetchDataSource = self
         self.tableView.separatorColor = .clear
         setActivityIndicator()
-
+        
+        
         let imageView = UIImageView()
         NSLayoutConstraint.activate([
             imageView.heightAnchor.constraint(equalToConstant: 20),
-            imageView.widthAnchor.constraint(equalToConstant: 20)
-        ])
-        
-        
+            imageView.widthAnchor.constraint(equalToConstant: 20)])
         let titleLabel = UILabel()
         titleLabel.text = "Drinks"
         titleLabel.font = .boldSystemFont(ofSize: 20)
@@ -43,7 +42,6 @@ class ViewController: UIViewController {
         //        spacing to the left
         hStack.spacing = -180
         //        hStack.alignment = .center
-        
         navigationItem.titleView = hStack
         
         DataBaseService.getRandomCocktailList { (apiResponse) in
@@ -59,6 +57,7 @@ class ViewController: UIViewController {
                 }
             }
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +96,9 @@ extension ViewController: FilterDelegate {
 
 extension ViewController: UITableViewDelegate,  UITableViewDataSource {
     
+    
+    
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let dataSource = dataSource else {
             return 1
@@ -123,13 +125,34 @@ extension ViewController: UITableViewDelegate,  UITableViewDataSource {
         guard let dataSource = dataSource else {
             return UITableViewCell()
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? CustomTableViewCell
-        cell?.cocktailImg.image = UIImage(data: dataSource[indexPath.section].drinks[indexPath.row].image!)
-        cell?.cocktailLbl.text = dataSource[indexPath.section].drinks[indexPath.row].name
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? CustomTableViewCell else {return UITableViewCell.init(style: .default, reuseIdentifier: "Cell")
+            
+        }
+        cell.cocktailImg.image = UIImage(data: dataSource[indexPath.section].drinks[indexPath.row].image!)
+        cell.cocktailLbl.text = dataSource[indexPath.section].drinks[indexPath.row].name
         
-        return cell!
+        return cell
         
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastItem = [dataSource].count - 1
+        if indexPath.row == lastItem {
+            
+        }
+    }
+//    func moreData() {
+//        for item in 1 ..< 10 {
+//            print(moreData)
+//            let lastItem = dataSource?.last
+//            var newValue: [Category] = [lastItem!] + [1]
+//            dataSource?.append(newElement: newValue)
+//
+//
+////            dataSource?.append([dataSource] + Array[1])
+//        }
+//        tableView.reloadData()
+//    }
     
     
     func setActivityIndicator() {
@@ -139,9 +162,10 @@ extension ViewController: UITableViewDelegate,  UITableViewDataSource {
     }
     
     // Set the spacing between sections
-       func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
-}
-
-
+    }
+    
+    
+    
 }
